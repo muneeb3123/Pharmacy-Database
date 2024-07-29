@@ -49,6 +49,51 @@ SELECT MAX(last_updated) AS last_updated FROM inventory;
 -- Find Medicines Running Low on Stock
 SELECT m.name, i.quantity FROM medicine m JOIN inventory i ON m.id = i.medicine_id WHERE i.quantity < 20;
 
+-- Count Medicines by Type
+SELECT type, COUNT(*) AS number_of_medicines
+FROM medicine
+GROUP BY type
+ORDER BY type;
+
+-- List All Medicines by Type
+SELECT type, name, dose_unit, dose_amount, price
+FROM medicine
+ORDER BY type, name;
+
+-- Find Medicines with a Specific Dose
+SELECT name, type, dose_unit, dose_amount, price
+FROM medicine
+WHERE dose_amount = 500
+ORDER BY name;
+
+--  List Medicines with Dosage Unit "mg"
+SELECT name, type, dose_unit, dose_amount, price
+FROM medicine
+WHERE dose_unit = 'mg'
+ORDER BY name;
+
+-- Find Medicines with Dose Amount in a Range
+SELECT name, type, dose_unit, dose_amount, price
+FROM medicine
+WHERE dose_amount BETWEEN 100 AND 500
+ORDER BY dose_amount;
+
+-- List Medicines with Price and Dose Information
+SELECT name, type, dose_unit, dose_amount, price
+FROM medicine
+ORDER BY name;
+
+-- Find the Most Expensive Medicine of Each Type
+SELECT type, name, dose_unit, dose_amount, price
+FROM medicine
+WHERE (type, price) IN (
+    SELECT type, MAX(price)
+    FROM medicine
+    GROUP BY type
+)
+ORDER BY type, price DESC;
+
+
 -- Get Total Quantity and Total Value of Inventory
 SELECT m.name AS medicine_name, SUM(i.quantity) AS total_quantity, SUM(i.quantity * m.price) AS total_value
 FROM inventory i
